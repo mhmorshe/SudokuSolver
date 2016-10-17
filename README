@@ -1,0 +1,6 @@
+This Program will solve Sudoku Puzzels.  The executable file a.out, can be run
+with a text file as input.  The text file should have the numbers for a sudoku
+puzzle in grid format with 0 for empty squares in the sudoku puzzle.  See the
+SudokuPuzzle.txt file for an example of what the input should look like.
+When the program is run, the unsolved puzzle will be printed first and then
+the solution to the puzzle will be printed bellow it.
