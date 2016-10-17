@@ -7,6 +7,7 @@ class SudokuBoard
     SudokuSquare* board [9][9];
 
     //create a blank sudoku board
+    //value of zero in a square indicates that the square is empty
     SudokuBoard()
     {
       for (int i = 0; i < 9; i++)
@@ -48,7 +49,7 @@ class SudokuBoard
   {
     bool toReturn = false;
 
-    //loop through the entire row and change the boolena flag if needed
+    //loop through the entire col and change the boolena flag if needed
     for(int i = 0; i < 9; i++)
     {
       if(board[i][toCheck->col] -> value == toCheck->value && toCheck->row != i)
@@ -97,6 +98,14 @@ class SudokuBoard
   {
     bool toReturn = false;
 
+
+    //value must be between 1 and 9 inclusive, else return false
+    if(toCheck->value <= 0 || toCheck->value > 9)
+    {
+      return false;
+    }
+
+    //if there is no violation in the row column or grid
     if(gridViolation(toCheck) == false)
     {
       if(colViolation(toCheck) == false)
@@ -107,12 +116,6 @@ class SudokuBoard
         }
       }
     }
-
-    if(toCheck->value == 0 || toCheck->value > 9)
-    {
-      return false;
-    }
-
 
     return toReturn;
 
@@ -133,6 +136,7 @@ class SudokuBoard
           toReturn = board[i][j];//assign the value
 
           //break the loop
+          //breack; does not work in nested loops
           i = 9;
           j = 9;
         }
@@ -140,7 +144,6 @@ class SudokuBoard
     }
 
     return toReturn;
-
   
   }
 

@@ -41,8 +41,10 @@ int main( int argc, char* argv[])
 
   }
 
-
+  //print the unsolved puzzle
   puzzle.printState();
+  cout<<endl<<endl;//end of line characters just for space
+
 
 
   /*After this point the Sudoku board should be filled with
@@ -63,7 +65,7 @@ int main( int argc, char* argv[])
     //wile the next square does not have a valid value
     while(puzzle.canPut(next) == false)
     {
-      //increment the value untill a valid one is found
+      //increment the value until a valid one is found
       next->value++;
 
       //if a valid value could not be found
@@ -73,14 +75,13 @@ int main( int argc, char* argv[])
         next->value = 0;
         next = backtrack.top();
         next ->value++;
-        //cout<< "POPED from stack: value = "<<next->value<<" row = "<<next->row<<" col = "<<next->col<<" grid = "<<next->grid<<endl;
+      
         backtrack.pop();
       }
 
     }  
 
-    //cout<< "PUSHED to stack: value = "<<next->value<<" row = "<<next->row<<" col = "<<next->col<<" grid = "<<next->grid<<endl;
-
+ 
     backtrack.push(next);
   }
 

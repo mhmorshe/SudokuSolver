@@ -11,6 +11,7 @@ class SudokuSquare
     int grid;//holds the 3 by 3 gris the cell is in
 
 
+    //constuctor for a square
     SudokuSquare(int toSet, int rowSet, int colSet)
     {
       value = toSet;
