@@ -5,85 +5,19 @@ class SudokuSquare
 {
 
   public:
-    bool set;//determin if the value of this square has been set yet
-    list<int> possible;
-    int value;
+    int value;//holds the value given to the square
+    int row;//holds the row the square is in
+    int col;//holds the column the square is in
+    int grid;//holds the 3 by 3 gris the cell is in
 
-    SudokuSquare()
-    {
-      set = false;
-      for (int i = 1; i <= 9; i++)
-      {
-        possible.push_back(i);
-      }
-    }
 
-    SudokuSquare(int toSet)
+    SudokuSquare(int toSet, int rowSet, int colSet)
     {
-      set = true;
       value = toSet;
-      possible.push_back(toSet);
+      row = rowSet;
+      col = colSet;
+      grid = (col/3) + 3*(row/3);
     }
-
-    //this method will update the value of the square
-    void update()
-    {
-      if (!set)
-      {
-        if (possible.size() == 1)//if there is only one possiblility
-        {
-          value = possible.front();
-          set = true;
-          //cout << "Updated to " << value << " ";
-        }
-      }
-    }
-
-
-    //this method will remove a possibility when needed
-    void removePoss(int poss)
-    {
-      if (!set)
-      {
-        possible.remove(poss);
-      }
-    }
-
-
-    void setVal(int val)
-    {
-      for (int i = 1; i <= 9; i++)
-      {
-        if (val != i)
-        {
-          removePoss(i);
-        }
-      }
-
-      update();
-
-    }
-
-
-
-    //return true if num is a possibility, false otherwise
-    bool isAPoss(int num)
-    {
-      bool toReturn = false;
-      if (!set)
-      {
-        std::list<int>::const_iterator iterator;
-        for (iterator = possible.begin(); iterator != possible.end(); ++iterator) 
-        {
-          if ((*iterator) == num)
-          {
-            toReturn = true;
-          }
-        }
-        return toReturn;
-      }
-    }
-
 
 
 };

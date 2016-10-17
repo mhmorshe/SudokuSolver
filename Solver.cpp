@@ -1,20 +1,22 @@
 #include <iostream>
-#include <fstream>
+#include <fstream>//to read from input file
+#include <stack>//for back track stack
 #include "SudokuBoard.cpp"
 using namespace std;
 int main( int argc, char* argv[])
 {
 
+
   if(argc != 2)
   {
-    cout << "Invalid input \n"<<"input should be a single text file"<<endl;
+    cout<< "Invalid inputs, the program should only take a text file as input"<<endl;
     return -1;
   }
 
 
 
   //create a blank sudoku board
-  SudokuBoard temp = *(new SudokuBoard());
+  SudokuBoard puzzle = *(new SudokuBoard());
 
   //open the input file
   ifstream inputFile(argv[1]);
@@ -26,6 +28,7 @@ int main( int argc, char* argv[])
 
 
   int currentInput;//this int will hold the current input value 
+
   //loop through each square on the board
   //and set values of squares form file input
   for(int row = 0; row < 9; row++)
@@ -33,68 +36,60 @@ int main( int argc, char* argv[])
     for(int col = 0; col < 9; col++)
     {
       inputFile >> currentInput;
-      if(currentInput != 0)
-      {
-        temp.board[row][col]->setVal(currentInput);
-      }
+      puzzle.board[row][col]->value = currentInput;
     }
 
   }
-/*	
-  temp.board[0][1]->setVal(9);
-  temp.board[0][3]->setVal(5);
-  temp.board[0][4]->setVal(6);
-  temp.board[0][6]->setVal(7);
-  temp.board[1][2]->setVal(4);
-  temp.board[1][3]->setVal(3);
-  temp.board[1][4]->setVal(9);
-  temp.board[2][1]->setVal(5);
-  temp.board[2][2]->setVal(2);
-  temp.board[2][4]->setVal(8);
-  temp.board[2][5]->setVal(7);
-  temp.board[3][1]->setVal(1);
-  temp.board[3][2]->setVal(7);
-  temp.board[3][3]->setVal(6);
-  temp.board[3][5]->setVal(4);
-  temp.board[3][6]->setVal(5);
-  temp.board[4][3]->setVal(2);
-  temp.board[5][5]->setVal(8);
-  temp.board[5][6]->setVal(4);
-  temp.board[5][7]->setVal(7);
-  temp.board[6][0]->setVal(3);
-  temp.board[6][2]->setVal(1);
-  temp.board[6][8]->setVal(9);
-  temp.board[7][0]->setVal(9);
-  temp.board[7][2]->setVal(6);
-  temp.board[7][4]->setVal(2);
-  temp.board[7][8]->setVal(3);
-  temp.board[8][1]->setVal(8);
-  temp.board[8][4]->setVal(1);
-  temp.board[8][7]->setVal(2);
-*/
-  temp.updateAll();
-
-  temp.printState();
-  cout << endl;
-  
-
-  while (temp.numSet() < 81)
-  {
-    cout << temp.numSet() << endl;
-    temp.printState();
 
 
-    temp.doRows();
-    temp.doColumns();
-    temp.doCells();
-    temp.updateAll();
-    temp.doOnlyByRow();
-    temp.doOnlyByCol();
-    temp.doOnlyByCell();
-    temp.updateAll();
+  puzzle.printState();
+
+
+  /*After this point the Sudoku board should be filled with
+   *the input values.  A value of 0 given to a 
+   *square indicates taht the square has not been filled in yet
+   */
+
+
+  //create a stack for back tracking
+  std::stack<SudokuSquare*> backtrack;
+ 
+  //loop wile the sudoku is unsolved
+  while(puzzle.nextOpenSpot() != NULL)
+  { 
+    //get the next empty spot
+    SudokuSquare* next = puzzle.nextOpenSpot();
+   
+    //wile the next square does not have a valid value
+    while(puzzle.canPut(next) == false)
+    {
+      //increment the value untill a valid one is found
+      next->value++;
+
+      //if a valid value could not be found
+      if(next->value > 9)
+      {
+        //reset the square to an empty square and pop the stack to backtrack
+        next->value = 0;
+        next = backtrack.top();
+        next ->value++;
+        //cout<< "POPED from stack: value = "<<next->value<<" row = "<<next->row<<" col = "<<next->col<<" grid = "<<next->grid<<endl;
+        backtrack.pop();
+      }
+
+    }  
+
+    //cout<< "PUSHED to stack: value = "<<next->value<<" row = "<<next->row<<" col = "<<next->col<<" grid = "<<next->grid<<endl;
+
+    backtrack.push(next);
   }
 
-  temp.printState();
-  cin.get();
+
+
+
+
+
+  
+  puzzle.printState();
   return 0;
 }
